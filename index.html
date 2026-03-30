@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="description" content="Modern ve kapsamlı blog sitesi - Teknoloji, yaşam, seyahat ve daha fazlası">
+    <meta name="keywords" content="blog, teknoloji, yaşam, seyahat, makale">
+    <meta name="author" content="Blog Sitesi">
+    <title>Modern Blog | Teknoloji, Yaşam ve Seyahat</title>
+    <!-- Font Awesome 6 (Free Icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fafaf8;
+            color: #1a1a1a;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        header {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+            flex-wrap: wrap;
+        }
+
+        .logo a {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            text-decoration: none;
+            color: #1f2937;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: #3b82f6;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 500;
+            color: #374151;
+            transition: color 0.2s;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #3b82f6;
+        }
+
+        .search-icon {
+            cursor: pointer;
+            font-size: 18px;
+            color: #4b5563;
+            transition: color 0.2s;
+        }
+
+        .search-icon:hover {
+            color: #3b82f6;
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .search-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .search-overlay.active {
+            display: flex;
+        }
+        .search-box {
+            width: 80%;
+            max-width: 600px;
+            background: white;
+            border-radius: 60px;
+            display: flex;
+            overflow: hidden;
+            box-shadow: 0 25px 40px rgba(0,0,0,0.2);
+        }
+        .search-box input {
+            flex: 1;
+            padding: 20px 24px;
+            border: none;
+            font-size: 18px;
+            outline: none;
+            font-family: 'Inter', sans-serif;
+        }
+        .search-box button {
+            background: #3b82f6;
+            border: none;
+            padding: 0 28px;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .search-box button:hover {
+            background: #2563eb;
+        }
+        .close-search {
+            position: absolute;
+            top: 40px;
+            right: 50px;
+            color: white;
+            font-size: 32px;
+            cursor: pointer;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #f0f4ff 0%, #e6f0fa 100%);
+            padding: 70px 0 60px;
+            text-align: center;
+            margin-bottom: 48px;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 16px;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            color: #4b5563;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 40px 0 24px;
+            font-family: 'Playfair Display', serif;
+            border-left: 5px solid #3b82f6;
+            padding-left: 18px;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 32px;
+            margin-bottom: 60px;
+        }
+
+        .blog-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            transition: transform 0.25s ease, box-shadow 0.25s;
+            cursor: pointer;
+        }
+        .blog-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.12);
+        }
+        .card-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            background: #d1d5db;
+        }
+        .card-content {
+            padding: 22px;
+        }
+        .card-category {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            color: #3b82f6;
+            margin-bottom: 10px;
+        }
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.4;
+            color: #1f2937;
+        }
+        .card-excerpt {
+            color: #6b7280;
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: #9ca3af;
+            border-top: 1px solid #f0f0f0;
+            padding-top: 16px;
+        }
+        .read-more {
+            color: #3b82f6;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .two-column {
+            display: flex;
+            gap: 48px;
+            margin: 20px 0 60px;
+            flex-wrap: wrap;
+        }
+        .main-content {
+            flex: 2.5;
+        }
+        .sidebar {
+            flex: 1;
+        }
+
+        .widget {
+            background: white;
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            border: 1px solid #edeff2;
+        }
+        .widget h3 {
+            font-size: 20px;
+            margin-bottom: 18px;
+            font-weight: 600;
+        }
+        .about-widget {
+            text-align: center;
+        }
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 16px;
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .social-links a {
+            color: #6b7280;
+            font-size: 20px;
+            transition: color 0.2s;
+            text-decoration: none;
+        }
+        .social-links a:hover {
+            color: #3b82f6;
+        }
+
+        .category-list {
+            list-style: none;
+        }
+        .category-list li {
+            margin-bottom: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 8px;
+        }
+        .category-list a {
+            text-decoration: none;
+            color: #374151;
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+        .category-list a:hover {
+            color: #3b82f6;
+        }
+
+        .newsletter input {
+            width: 100%;
+            padding: 12px;
+            margin: 12px 0;
+            border: 1px solid #e2e8f0;
+            border-radius: 40px;
+            font-family: inherit;
+        }
+        .btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background: #2563eb;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 50px 0;
+        }
+        .page-item {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 8px 16px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .page-item.active, .page-item:hover {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        footer {
+            background: #111827;
+            color: #e5e7eb;
+            padding: 48px 0 24px;
+            margin-top: 40px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-col h4 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: white;
+        }
+        .footer-col ul {
+            list-style: none;
+        }
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+        .footer-col a {
+            color: #cbd5e1;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .footer-col a:hover {
+            color: #3b82f6;
+        }
+        .copyright {
+            text-align: center;
+            border-top: 1px solid #1f2937;
+            padding-top: 24px;
+            font-size: 14px;
+            color: #9ca3af;
+        }
+
+        .toast-message {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #1f2937;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+                padding: 20px 0;
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .menu-toggle {
+                display: block;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            .two-column {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <div class="navbar">
+            <div class="logo">
+                <a href="#" id="homeLogo">Blog<span>Hub</span></a>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#" class="nav-link active" data-category="all">Ana Sayfa</a></li>
+                <li><a href="#" class="nav-link" data-category="Teknoloji">Teknoloji</a></li>
+                <li><a href="#" class="nav-link" data-category="Yaşam">Yaşam</a></li>
+                <li><a href="#" class="nav-link" data-category="Seyahat">Seyahat</a></li>
+                <li><a href="#" class="nav-link" data-category="iletisim">İletişim</a></li>
+            </ul>
+            <div class="search-icon" id="searchIcon">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="search-overlay" id="searchOverlay">
+    <div class="close-search" id="closeSearchBtn">&times;</div>
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Blog yazılarında ara...">
+        <button id="searchButton"><i class="fas fa-search"></i></button>
+    </div>
+</div>
+
+<section class="hero">
+    <div class="container">
+        <h1>Düşüncelerin Dünyasına Hoş Geldin</h1>
+        <p>Teknoloji, seyahat, yaşam ve daha fazlası. Güncel makaleler, ilham veren hikayeler ve derin içerikler.</p>
+    </div>
+</section>
+
+<div class="container">
+    <div class="section-title">🔥 Öne Çıkan Yazılar</div>
+    <div class="blog-grid" id="featuredGrid"></div>
+
+    <div class="two-column">
+        <div class="main-content">
+            <div class="section-title" id="mainSectionTitle">📝 Son Yazılar</div>
+            <div id="postsContainer" class="blog-grid" style="grid-template-columns: 1fr;"></div>
+            <div class="pagination" id="paginationControls"></div>
+        </div>
+        <aside class="sidebar">
+            <div class="widget about-widget">
+                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Yazar" class="avatar">
+                <h3>Selin Demir</h3>
+                <p>Teknoloji ve seyahat tutkunu, dijital dünyanın meraklısı. 10+ yıllık içerik deneyimiyle yazıyorum.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link" data-social="twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link" data-social="instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-link" data-social="linkedin"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="widget">
+                <h3><i class="fas fa-folder-open"></i> Kategoriler</h3>
+                <ul class="category-list" id="categoryList"></ul>
+            </div>
+            <div class="widget newsletter">
+                <h3><i class="fas fa-envelope"></i> Bültene Katıl</h3>
+                <p>Yeni yazılardan ilk sen haberdar ol!</p>
+                <input type="email" id="newsEmail" placeholder="E-posta adresiniz">
+                <button class="btn" id="subscribeBtn">Abone Ol</button>
+                <div id="subscribeMsg" style="font-size:13px; margin-top:10px; color:#3b82f6;"></div>
+            </div>
+            <div class="widget">
+                <h3><i class="fas fa-tags"></i> Popüler Etiketler</h3>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                    <span style="background:#eef2ff; padding:5px 12px; border-radius:30px; font-size:12px; cursor:pointer;" class="tag" data-tag="teknoloji">#teknoloji</span>
+                    <span style="background:#eef2ff; padding:5px 12px; border-radius:30px; font-size:12px; cursor:pointer;" class="tag" data-tag="seyahat">#seyahat</span>
+                    <span style="background:#eef2ff; padding:5px 12px; border-radius:30px; font-size:12px; cursor:pointer;" class="tag" data-tag="yapayzeka">#yapayzeka</span>
+                    <span style="background:#eef2ff; padding:5px 12px; border-radius:30px; font-size:12px; cursor:pointer;" class="tag" data-tag="yaşam">#yaşam</span>
+                    <span style="background:#eef2ff; padding:5px 12px; border-radius:30px; font-size:12px; cursor:pointer;" class="tag" data-tag="kitap">#kitap</span>
+                </div>
+            </div>
+        </aside>
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>BlogHub</h4>
+                <p>Modern blog deneyimi, özgün içerikler ve ilham veren yazılar.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Hızlı Linkler</h4>
+                <ul>
+                    <li><a href="#" class="footer-link" data-page="hakkimizda">Hakkımızda</a></li>
+                    <li><a href="#" class="footer-link" data-page="gizlilik">Gizlilik Politikası</a></li>
+                    <li><a href="#" class="footer-link" data-page="kullanim">Kullanım Şartları</a></li>
+                    <li><a href="#" class="footer-link" data-page="iletisim">İletişim</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Arşiv</h4>
+                <ul>
+                    <li><a href="#" class="archive-link" data-month="2025-01">Ocak 2025</a></li>
+                    <li><a href="#" class="archive-link" data-month="2024-12">Aralık 2024</a></li>
+                    <li><a href="#" class="archive-link" data-month="2024-11">Kasım 2024</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2025 BlogHub - Tüm hakları saklıdır. | Hayal gücünün sınırlarını zorlayan içerikler.
+        </div>
+    </div>
+</footer>
+
+<script>
+    const allPosts = [
+        { id: 1, title: "Yapay Zeka ile Geleceği Şekillendirmek", excerpt: "Yapay zeka hayatımızın her alanına giriyor. İşte detaylar ve gelecek tahminleri...", category: "Teknoloji", date: "15 Mart 2025", image: "https://picsum.photos/id/1/400/250", featured: true, tags: ["teknoloji", "yapayzeka"] },
+        { id: 2, title: "Seyahat Etmenin Ruh Sağlığına Faydaları", excerpt: "Yeni yerler keşfetmek zihninizi nasıl tazeler? Bilimsel araştırmalar ışığında...", category: "Seyahat", date: "10 Mart 2025", image: "https://picsum.photos/id/15/400/250", featured: true, tags: ["seyahat", "yaşam"] },
+        { id: 3, title: "Minimalist Yaşam: Daha Az ile Daha Fazla", excerpt: "Eşyalarınızı azaltarak özgürleşin. Minimalizm rehberi ve pratik ipuçları.", category: "Yaşam", date: "5 Mart 2025", image: "https://picsum.photos/id/20/400/250", featured: false, tags: ["yaşam"] },
+        { id: 4, title: "Web Geliştirmede 2025 Trendleri", excerpt: "Frontend ve backend dünyasında yeni akımlar, framework'ler ve araçlar.", category: "Teknoloji", date: "28 Şubat 2025", image: "https://picsum.photos/id/26/400/250", featured: false, tags: ["teknoloji"] },
+        { id: 5, title: "Paris’te Görülmesi Gereken 10 Yer", excerpt: "Sanat, tarih ve lezzet dolu bir rehber. Eyfel Kulesi'nden Montmartre'a...", category: "Seyahat", date: "20 Şubat 2025", image: "https://picsum.photos/id/104/400/250", featured: true, tags: ["seyahat"] },
+        { id: 6, title: "Meditasyon ile Günlük Stresi Azaltın", excerpt: "Sadece 10 dakikada daha huzurlu olun. Adım adım meditasyon rehberi.", category: "Yaşam", date: "14 Şubat 2025", image: "https://picsum.photos/id/125/400/250", featured: false, tags: ["yaşam"] },
+        { id: 7, title: "Blockchain Teknolojisinin Geleceği", excerpt: "Sadece kripto para değil, pek çok sektörde devrim yaratacak teknoloji.", category: "Teknoloji", date: "5 Şubat 2025", image: "https://picsum.photos/id/155/400/250", featured: false, tags: ["teknoloji"] },
+        { id: 8, title: "Evde Çalışmanın Altın Kuralları", excerpt: "Verimliliğinizi artıracak ipuçları ve ofis düzeni önerileri.", category: "Yaşam", date: "28 Ocak 2025", image: "https://picsum.ph
